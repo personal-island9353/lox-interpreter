@@ -1,11 +1,37 @@
 use crate::scanner::Literal;
 use crate::scanner::Token;
+use std::fmt::{Display, Formatter, Result};
 
 pub enum Expr {
     Binary(Box<Expr>, Token, Box<Expr>),
     Grouping(Box<Expr>),
     Literal(Literal),
     Unary(Token, Box<Expr>),
+}
+
+impl Display for Expr {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Expr::Binary(left, token, right) => {
+                parenthesize(f, &token.lexeme, &[left, right])
+            }
+            Expr::Grouping(expr) => {
+                parenthesize(f, "grouping", &[expr])
+            }
+            Expr::Literal(literal) => write!(f, "{}", literal),
+            Expr::Unary(token, expr) => {
+                parenthesize(f, &token.lexeme, &[expr])
+            }
+        }
+    }
+}
+
+fn parenthesize(f: &mut Formatter<'_>, name: &str, exprs: &[&Box<Expr>]) -> Result {
+    write!(f, "({}", name)?;
+    for expr in exprs {
+        write!(f, " {}", expr)?;
+    }
+    write!(f, ")")
 }
 
 pub struct AstPrinter;
@@ -16,41 +42,6 @@ impl AstPrinter {
     }
 
     pub fn print(&self, expr: &Expr) -> String {
-        let mut builder = String::new();
-
-       let result = match expr {
-            Expr::Binary(left, token, right) => {
-                self.parenthesize(&token.lexeme, &[left, right])
-            }
-            Expr::Grouping(expr) => {
-                self.parenthesize(&"grouping".to_string(), &[expr])
-            }
-            Expr::Literal(literal) => match literal {
-                Literal::Number(number) => number.to_string(),
-                Literal::String(string) => string.clone(),
-            },
-            Expr::Unary(token, expr) => {
-                self.parenthesize(&token.lexeme, &[expr])
-            }
-        };
-
-        builder.push_str(result.as_str());
-
-        builder.to_string()
-    }
-
-    fn parenthesize(&self, name: &String, expr: &[&Box<Expr>]) -> String {
-        let mut builder = String::new();
-        builder.push_str("(");
-        builder.push_str(name.as_str());
-        builder.push_str(" ");
-        let expressions = expr
-            .iter()
-            .map(|expr| self.print(expr))
-            .collect::<Vec<_>>()
-            .join(" ");
-        builder.push_str(expressions.as_str());
-        builder.push_str(")");
-        builder.to_string()
+        expr.to_string()
     }
 }

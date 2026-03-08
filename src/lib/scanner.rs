@@ -246,6 +246,15 @@ pub enum Literal {
     String(String),
 }
 
+impl std::fmt::Display for Literal {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Literal::Number(n) => write!(f, "{}", n),
+            Literal::String(s) => write!(f, "{}", s),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub enum TokenType {
     // Single-character tokens.
