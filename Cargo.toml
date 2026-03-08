@@ -3,5 +3,13 @@ name = "lox"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "liblox"
+path = "src/lib/lib.rs"
+
+[[bin]]
+name = "lox"
+path = "src/cmd/cmd.rs"
+
 [dependencies]
 lazy_static = "1.5.0"

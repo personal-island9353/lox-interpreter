@@ -1,8 +1,5 @@
-mod runner;
-mod scanner;
-mod error;
+use liblox::Runner;
 
-use crate::runner::Runner;
 use std::env;
 use std::io::Write;
 
@@ -11,6 +8,8 @@ fn main() {
 
     if args.len() > 2 {
         println!("Usage: lox [script]");
+
+        std::process::exit(64);
     } else if args.len() == 2 {
         run_file(&args[1]);
     } else {
