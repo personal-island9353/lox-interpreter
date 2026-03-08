@@ -1,6 +1,8 @@
 mod ast;
 mod error;
 mod runner;
-mod scanner;
+pub mod scanner;
 
 pub use runner::Runner;
+pub use ast::Expr;
+pub use ast::AstPrinter;

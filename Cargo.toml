@@ -11,5 +11,9 @@ path = "src/lib/lib.rs"
 name = "lox"
 path = "src/cmd/cmd.rs"
 
+[[bin]]
+name = "lox-printer"
+path = "src/cmd/printer.rs"
+
 [dependencies]
 lazy_static = "1.5.0"

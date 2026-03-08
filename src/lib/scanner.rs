@@ -52,7 +52,8 @@ impl<'a> Scanner<'a> {
             self.scan_token();
         }
 
-        self.tokens.push(Token::new(TokenType::Eof, String::new(), None, self.line));
+        self.tokens
+            .push(Token::new(TokenType::Eof, String::new(), None, self.line));
 
         &self.tokens
     }
@@ -204,10 +205,10 @@ impl<'a> Scanner<'a> {
 }
 
 pub struct Token {
-    token_type: TokenType,
-    lexeme: String,
-    literal: Option<Literal>,
-    line: usize,
+    pub token_type: TokenType,
+    pub lexeme: String,
+    pub literal: Option<Literal>,
+    pub line: usize,
 }
 
 impl std::fmt::Display for Token {
@@ -217,7 +218,12 @@ impl std::fmt::Display for Token {
 }
 
 impl Token {
-    fn new(token_type: TokenType, lexeme: String, literal: Option<Literal>, line: usize) -> Self {
+    pub fn new(
+        token_type: TokenType,
+        lexeme: String,
+        literal: Option<Literal>,
+        line: usize,
+    ) -> Self {
         Self {
             token_type,
             lexeme,
@@ -227,18 +233,21 @@ impl Token {
     }
 
     fn str(&self) -> String {
-        format!("[Line {}] Type = {:?}, Lexeme = {}, literal = {:?}", self.line, self.token_type, self.lexeme, self.literal)
+        format!(
+            "[Line {}] Type = {:?}, Lexeme = {}, literal = {:?}",
+            self.line, self.token_type, self.lexeme, self.literal
+        )
     }
 }
 
 #[derive(Debug)]
-enum Literal {
+pub enum Literal {
     Number(f64),
     String(String),
 }
 
 #[derive(Debug, Copy, Clone)]
-enum TokenType {
+pub enum TokenType {
     // Single-character tokens.
     LeftParen,
     RightParen,
